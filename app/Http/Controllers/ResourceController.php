@@ -84,6 +84,8 @@ class ResourceController extends Controller
 
         if ($request->hasFile('cover_image')) {
             $validated['cover_image'] = $request->file('cover_image')->store('covers', 'public');
+        } elseif ($request->filled('cover_image_url')) {
+            $validated['cover_image'] = $request->input('cover_image_url');
         }
 
         $validated['created_by'] = Auth::id();
@@ -121,11 +123,13 @@ class ResourceController extends Controller
 
         if ($request->hasFile('cover_image')) {
             // Delete old cover image if it exists
-            if ($resource->cover_image) {
+            if ($resource->cover_image && !str_starts_with($resource->cover_image, 'http')) {
                 Storage::disk('public')->delete($resource->cover_image);
             }
 
             $validated['cover_image'] = $request->file('cover_image')->store('covers', 'public');
+        } elseif ($request->filled('cover_image_url')) {
+            $validated['cover_image'] = $request->input('cover_image_url');
         }
 
         $resource->update($validated);
@@ -172,6 +176,7 @@ class ResourceController extends Controller
             'language' => ['sometimes', 'string', 'max:50'],
             'edition' => ['nullable', 'string', 'max:50'],
             'cover_image' => ['nullable', 'image', 'max:2048'],
+            'cover_image_url' => ['nullable', 'string', 'max:1000'],
             'description' => ['nullable', 'string', 'max:5000'],
         ];
     }

@@ -2,7 +2,7 @@
 <html><head><meta charset="utf-8"><title>{{ $title }}</title>
 <style>body{font-family:Arial,sans-serif;font-size:12px;color:#333;margin:30px}h1{color:#4f46e5;font-size:20px;border-bottom:2px solid #4f46e5;padding-bottom:8px}h2{color:#6366f1;font-size:16px;margin-top:24px}h3{color:#333;font-size:14px;margin-top:16px}table{width:100%;border-collapse:collapse;margin-top:12px}th,td{border:1px solid #ddd;padding:8px;text-align:left}th{background:#f0f0ff;font-weight:bold}.score{font-weight:bold;text-align:center}.header{text-align:center;margin-bottom:30px}.meta{color:#666;font-size:11px}.footer{text-align:center;color:#999;font-size:10px;margin-top:40px;border-top:1px solid #ddd;padding-top:10px}.page-break{page-break-after:always}</style>
 </head><body>
-<div class="header"><h1>EduQual Assessment Report</h1><p class="meta">{{ $title }}</p><p class="meta">Generated on {{ $generatedAt->format('F d, Y \a\t h:i A') }}</p></div>
+<div class="header"><h1>Bookly Assessment Report</h1><p class="meta">{{ $title }}</p><p class="meta">Generated on {{ $generatedAt->format('F d, Y \a\t h:i A') }}</p></div>
 
 @foreach($resources as $resource)
 <h2>{{ $resource->title }}</h2>
@@ -30,5 +30,5 @@
 @if(!$loop->last)<div class="page-break"></div>@endif
 @endforeach
 
-<div class="footer">EduQual — Educational Resource Quality Assessment System</div>
+<div class="footer">Bookly — Educational Resource Quality Assessment System</div>
 </body></html>

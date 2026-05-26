@@ -28,7 +28,7 @@ class ResourcePolicy
      */
     public function create(User $user): bool
     {
-        return $user->isSuperAdmin();
+        return true;
     }
 
     /**
@@ -36,7 +36,7 @@ class ResourcePolicy
      */
     public function update(User $user, Resource $resource): bool
     {
-        return $user->isSuperAdmin();
+        return true;
     }
 
     /**
@@ -44,7 +44,7 @@ class ResourcePolicy
      */
     public function delete(User $user, Resource $resource): bool
     {
-        return $user->isSuperAdmin();
+        return true;
     }
 
     /**
@@ -52,7 +52,7 @@ class ResourcePolicy
      */
     public function restore(User $user, Resource $resource): bool
     {
-        return $user->isSuperAdmin();
+        return true;
     }
 
     /**
@@ -60,6 +60,6 @@ class ResourcePolicy
      */
     public function forceDelete(User $user, Resource $resource): bool
     {
-        return $user->isSuperAdmin();
+        return true;
     }
 }

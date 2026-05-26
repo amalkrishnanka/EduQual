@@ -5,13 +5,25 @@
     {{-- Resource Header --}}
     <div class="glass rounded-xl p-6">
         <div class="flex flex-col lg:flex-row gap-6">
-            <div class="w-full lg:w-48 h-48 rounded-xl bg-gradient-to-br from-indigo-600/30 to-violet-600/30 flex items-center justify-center flex-shrink-0">
-                @if($resource->cover_image)<img src="{{ Storage::url($resource->cover_image) }}" class="w-full h-full object-cover rounded-xl">@else<svg class="w-16 h-16 text-indigo-400/50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>@endif
+            {{-- Fixed size cover image container preventing stretching --}}
+            <div class="w-40 h-56 rounded-xl bg-gradient-to-br from-forest/10 to-forest/5 flex items-center justify-center flex-shrink-0 overflow-hidden relative border border-forest/10 shadow-inner-sm mx-auto lg:mx-0">
+                @if($resource->cover_image_url)
+                {{-- Ambient blurred background glow from the cover itself --}}
+                <img src="{{ $resource->cover_image_url }}" alt="" class="absolute inset-0 w-full h-full object-cover blur-xl opacity-35 scale-110 pointer-events-none">
+                {{-- Crisp book cover constrained to fit any cover aspect ratio (square or portrait) --}}
+                <img src="{{ $resource->cover_image_url }}" alt="{{ $resource->title }}" class="max-h-48 max-w-[85%] object-contain rounded shadow-[0_12px_24px_rgba(26,59,43,0.22)] border border-white/20 z-10">
+                @else
+                <div class="w-16 h-16 rounded-full bg-forest/5 flex items-center justify-center">
+                    <svg class="w-8 h-8 text-forest/40" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+                </div>
+                @endif
             </div>
-            <div class="flex-1">
-                <h1 class="text-2xl font-bold">{{ $resource->title }}</h1>
+            {{-- Details Column - min-w-0 allows flex child to shrink and wrap text properly without overflowing --}}
+            <div class="flex-1 min-w-0">
+                <h1 class="text-2xl font-bold break-words">{{ $resource->title }}</h1>
                 <p class="text-slate-400 mt-1">by {{ $resource->author }}</p>
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mt-4">
+                {{-- Responsive metadata grid - stays in clean 2 columns until full wide desktop --}}
+                <div class="grid grid-cols-2 xl:grid-cols-4 gap-4 mt-4">
                     <div><p class="text-xs text-slate-500">Type</p><p class="text-sm font-medium mt-0.5">{{ ucfirst($resource->type) }}</p></div>
                     <div><p class="text-xs text-slate-500">Subject</p><p class="text-sm font-medium mt-0.5">{{ $resource->subject }}</p></div>
                     <div><p class="text-xs text-slate-500">Grade Level</p><p class="text-sm font-medium mt-0.5">{{ $resource->grade_level }}</p></div>
@@ -20,9 +32,10 @@
                     @if($resource->isbn)<div><p class="text-xs text-slate-500">ISBN</p><p class="text-sm font-medium mt-0.5">{{ $resource->isbn }}</p></div>@endif
                     @if($resource->edition)<div><p class="text-xs text-slate-500">Edition</p><p class="text-sm font-medium mt-0.5">{{ $resource->edition }}</p></div>@endif
                 </div>
-                @if($resource->description)<p class="text-sm text-slate-300 mt-4">{{ $resource->description }}</p>@endif
+                @if($resource->description)<p class="text-sm text-slate-300 mt-4 break-words">{{ $resource->description }}</p>@endif
             </div>
-            <div class="flex flex-col items-center gap-3 lg:w-48">
+            {{-- Actions Column - flex-shrink-0 guarantees it keeps its visual structure --}}
+            <div class="flex flex-col items-center gap-3 lg:w-48 flex-shrink-0">
                 @if($resource->average_score)
                 <div class="text-center">
                     <div class="text-4xl font-bold {{ $resource->average_score >= 8 ? 'text-emerald-400' : ($resource->average_score >= 6 ? 'text-cyan-400' : ($resource->average_score >= 4 ? 'text-amber-400' : 'text-rose-400')) }}">{{ number_format($resource->average_score, 1) }}</div>
@@ -31,13 +44,9 @@
                 @endif
                 <p class="text-sm text-slate-400">{{ $resource->assessments->where('status', 'submitted')->count() }} assessments</p>
                 <div class="flex flex-col gap-2 w-full">
-                    @if(auth()->user()->isSuperAdmin() || auth()->user()->isReviewer())
                     <a href="{{ route('assessments.create', $resource) }}" class="btn btn-primary btn-sm w-full">Assess</a>
                     <a href="{{ route('flags.create', $resource) }}" class="btn btn-secondary btn-sm w-full">Flag</a>
-                    @endif
-                    @if(auth()->user()->isSuperAdmin())
                     <a href="{{ route('resources.edit', $resource) }}" class="btn btn-secondary btn-sm w-full">Edit</a>
-                    @endif
                 </div>
             </div>
         </div>

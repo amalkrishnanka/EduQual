@@ -18,37 +18,37 @@ class UserSeeder extends Seeder
         $users = [
             [
                 'name'     => 'Admin User',
-                'email'    => 'admin@eduqual.com',
+                'email'    => 'admin@bookly.com',
                 'role'     => 'super_admin',
                 'password' => $password,
             ],
             [
                 'name'     => 'Dr. Sarah Chen',
-                'email'    => 'sarah@eduqual.com',
+                'email'    => 'sarah@bookly.com',
                 'role'     => 'reviewer',
                 'password' => $password,
             ],
             [
                 'name'     => 'Prof. James Miller',
-                'email'    => 'james@eduqual.com',
+                'email'    => 'james@bookly.com',
                 'role'     => 'reviewer',
                 'password' => $password,
             ],
             [
                 'name'     => 'Dr. Priya Sharma',
-                'email'    => 'priya@eduqual.com',
+                'email'    => 'priya@bookly.com',
                 'role'     => 'reviewer',
                 'password' => $password,
             ],
             [
                 'name'     => 'Alex Johnson',
-                'email'    => 'alex@eduqual.com',
+                'email'    => 'alex@bookly.com',
                 'role'     => 'viewer',
                 'password' => $password,
             ],
             [
                 'name'     => 'Maria Garcia',
-                'email'    => 'maria@eduqual.com',
+                'email'    => 'maria@bookly.com',
                 'role'     => 'viewer',
                 'password' => $password,
             ],

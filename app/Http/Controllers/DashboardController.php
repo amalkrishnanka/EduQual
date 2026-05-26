@@ -18,15 +18,14 @@ class DashboardController extends Controller
     public function index(Request $request): View
     {
         $user = Auth::user();
-        $data = ['user' => $user];
 
-        if ($user->isSuperAdmin()) {
-            $data = array_merge($data, $this->superAdminData());
-        } elseif ($user->isReviewer()) {
-            $data = array_merge($data, $this->reviewerData($user));
-        } else {
-            $data = array_merge($data, $this->viewerData());
-        }
+        // Load unified system-wide dataset for a comprehensive dashboard workspace
+        $data = array_merge(
+            ['user' => $user],
+            $this->superAdminData(),
+            $this->reviewerData($user),
+            $this->viewerData()
+        );
 
         return view('dashboard.index', $data);
     }

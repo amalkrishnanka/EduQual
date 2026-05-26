@@ -121,7 +121,7 @@ class AssessmentController extends Controller
             $assessment->save();
 
             // If the submit flag is present, mark as submitted
-            if ($request->boolean('submit')) {
+            if ($request->input('action') === 'submit') {
                 $assessment->update([
                     'status' => 'submitted',
                     'submitted_at' => now(),
@@ -149,10 +149,14 @@ class AssessmentController extends Controller
         $criteria = Criterion::active()->orderBy('sort_order')->get();
         $resource = $assessment->resource;
 
+        // Key existing scores by criterion_id for pre-populating the edit form
+        $existingScores = $assessment->scores->keyBy('criterion_id');
+
         return view('assessments.create', [
             'resource' => $resource,
             'criteria' => $criteria,
             'assessment' => $assessment,
+            'existingScores' => $existingScores,
         ]);
     }
 
@@ -190,7 +194,7 @@ class AssessmentController extends Controller
             $assessment->computeOverallScore();
             $assessment->save();
 
-            if ($request->boolean('submit')) {
+            if ($request->input('action') === 'submit') {
                 $assessment->update([
                     'status' => 'submitted',
                     'submitted_at' => now(),

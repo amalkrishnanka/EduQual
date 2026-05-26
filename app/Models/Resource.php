@@ -119,6 +119,22 @@ class Resource extends Model
     }
 
     // ── Accessors ────────────────────────────────────────────
+    
+    /**
+     * Get resolved cover image URL (supports local storage and external Google Books URLs).
+     */
+    public function getCoverImageUrlAttribute(): ?string
+    {
+        if (!$this->cover_image) {
+            return null;
+        }
+
+        if (str_starts_with($this->cover_image, 'http://') || str_starts_with($this->cover_image, 'https://')) {
+            return $this->cover_image;
+        }
+
+        return \Illuminate\Support\Facades\Storage::url($this->cover_image);
+    }
 
     /**
      * Average overall_score from submitted assessments.
@@ -140,5 +156,13 @@ class Resource extends Model
         return $this->assessments()
             ->where('status', 'submitted')
             ->count();
+    }
+
+    /**
+     * Shelves this resource belongs to.
+     */
+    public function shelves(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
+        return $this->belongsToMany(Shelf::class)->withTimestamps();
     }
 }

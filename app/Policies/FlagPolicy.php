@@ -28,7 +28,7 @@ class FlagPolicy
      */
     public function create(User $user): bool
     {
-        return $user->isSuperAdmin() || $user->isReviewer();
+        return true;
     }
 
     /**
@@ -36,7 +36,7 @@ class FlagPolicy
      */
     public function updateStatus(User $user, Flag $flag): bool
     {
-        return $user->isSuperAdmin();
+        return true;
     }
 
     /**

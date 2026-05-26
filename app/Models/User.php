@@ -110,4 +110,12 @@ class User extends Authenticatable
     {
         return $this->hasMany(Flag::class, 'resolved_by');
     }
+
+    /**
+     * Shelves created by this user.
+     */
+    public function shelves(): HasMany
+    {
+        return $this->hasMany(Shelf::class);
+    }
 }

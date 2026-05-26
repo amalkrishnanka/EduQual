@@ -7,10 +7,11 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use Illuminate\Queue\SerializesModels;
 
 class FlagStatusChanged extends Notification implements ShouldQueue
 {
-    use Queueable;
+    use Queueable, SerializesModels;
 
     /**
      * Create a new notification instance.
@@ -44,7 +45,7 @@ class FlagStatusChanged extends Notification implements ShouldQueue
             ->line('**Previous Status:** ' . ucfirst(str_replace('_', ' ', $this->oldStatus)))
             ->line('**New Status:** ' . ucfirst(str_replace('_', ' ', $this->newStatus)))
             ->action('View Flag', url('/flags/' . $this->flag->id))
-            ->line('Thank you for using EduQual.');
+            ->line('Thank you for using Bookly.');
     }
 
     /**
